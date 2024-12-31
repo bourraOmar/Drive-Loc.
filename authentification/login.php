@@ -1,23 +1,24 @@
 <?php
+
+session_start();
+
 require_once '../connection/connect.php';
 require_once '../classes/user.php';
 
-if ($_SERVER['REQUEST_METHODE'] == 'POST') {
-    $email == $_POST['email'];
-    $possword == $_POST['passwrod'];
 
-    $user == new user();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $user = new User();
 
     if ($user->authenticate($email, $password)) {
         exit();
     } else {
-        $error_message = "Invalide email or password.";
+        $error_message = "Invalid email or password.";
     }
 }
 ?>
-
-
-
 
 
 <!DOCTYPE html>
@@ -47,12 +48,12 @@ if ($_SERVER['REQUEST_METHODE'] == 'POST') {
                 <form class="space-y-4" method="post">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-                        <input type="email" name="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <input type="email" name="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" require>
                     </div>
 
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <input type="password" name="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <input type="password" name="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" require>
                     </div>
 
                     <div class="flex items-center justify-between">

@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+if($_SESSION['role_id'] == 1){
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -487,3 +492,9 @@
     </script>
 </body>
 </html>
+<?php
+}else{
+    header('location: ../index.php');
+    exit();
+}
+?>
