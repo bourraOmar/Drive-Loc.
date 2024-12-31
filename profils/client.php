@@ -18,7 +18,7 @@ session_start();
         <div class="flex justify-between items-center mb-8 bg-blue-800 text-white p-4 rounded-lg">
             <h1 class="text-2xl font-bold">My Profile</h1>
 
-            <form action="../user_Management/user_manager.php" method="post">
+            <form action="log out.php" method="post">
             <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center" name="LogoutBTN">
                 <i class="fas fa-sign-out-alt mr-2"></i>
                 Logout
@@ -34,7 +34,7 @@ session_start();
                     <div class="bg-blue-600 h-32"></div>
                     <div class="relative px-4 pb-6">
                         <div class="absolute -top-16 left-1/2 transform -translate-x-1/2">
-                            <img src="../imgs/profile-major.svg"  alt="Profile Picture" 
+                            <img src="../img/profile-major.svg"  alt="Profile Picture" 
                                  class="w-32 h-32 rounded-full border-4 border-white bg-white shadow-lg">
                         </div>
                         <div class="pt-16 text-center">
@@ -84,7 +84,7 @@ session_start();
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <?php 
-                                $activity->showreservationOfUser();
+                                // $activity->showreservationOfUser();
                                 ?>
                             </tbody>
                         </table>
