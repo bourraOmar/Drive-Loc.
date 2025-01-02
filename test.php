@@ -1,7 +1,6 @@
 <?php
-
-require_once '../classes/categorie.php';
-require_once '../classes/vehicle.php';
+require_once '../classes/Categorie.php';
+require_once '../classes/vehicule_class.php';
 
 $vehicule = new Vehicule();
 $categorie = new Categorie();
@@ -18,13 +17,13 @@ if (isset($_POST['Vehicle_submit'])) {
   $marque = $_POST['marque'];
   $Category = $_POST['Category'];
   $price = $_POST['price'];
-  $Vehicle_Image = $_POST['Vehicle_Image'];
+  $Vehicle_Image = $_FILES['Vehicle_Image'];
 
   $vehicule->AjouterVehicule($modele, $marque, $price, $Vehicle_Image, $Category);
 }
 
-session_start();
-if($_SESSION['role_id'] == 1){
+
+if ($_SESSION['role_id'] == 1) {
 ?>
   <!DOCTYPE html>
   <html lang="en">
@@ -36,7 +35,7 @@ if($_SESSION['role_id'] == 1){
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
       .bg-primary {
-        background-color:rgb(0, 123, 255);
+        background-color: #FFD700;
       }
 
       .modal {
@@ -65,15 +64,16 @@ if($_SESSION['role_id'] == 1){
 
   <body class="bg-gray-50">
     <!-- Top Navigation -->
-    <nav class="bg-blue-600 shadow-lg">
+    <nav class="bg-white shadow-lg">
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
+            <img src="../imgs/360_F_323469705_belmsoxt9kj49rxSmOBXpO0gHtfVJvjl-removebg-preview.png" alt="LOGO" class="h-8 w-auto">
             <span class="ml-2 font-semibold text-xl">Drive & Loc Admin</span>
           </div>
           <div class="flex items-center space-x-4">
-            <span class="text-black"><?php echo $_SESSION['nom'] ?></span>
-            <a href="../profils/log out.php" class="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700">Logout</a>
+            <span class="text-gray-700"><?php echo $_SESSION['prenom'] . " " . $_SESSION['nom'] ?></span>
+            <a href="../classes/user.php?signout" class="bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-200">Logout</a>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@ if($_SESSION['role_id'] == 1){
             <div>
               <p class="text-gray-500 text-sm">Total Categories</p>
               <h3 class="text-2xl font-bold mt-1">
-              <h3 class="text-2xl font-bold mt-1"><?php echo count($categorie->showCategorie()) ?></h3>
+                <?php echo count($categorie->showCategorie()); ?>
               </h3>
             </div>
             <div class="bg-blue-100 p-3 rounded-full">
@@ -148,13 +148,13 @@ if($_SESSION['role_id'] == 1){
 
       <!-- Action Buttons -->
       <div class="mb-6 flex space-x-4">
-        <button onclick="openModal('addVehicleModal')" class="bg-primary px-4 py-2 rounded-lg hover:bg-blue-400 flex items-center">
+        <button onclick="openModal('addVehicleModal')" class="bg-primary px-4 py-2 rounded-lg hover:bg-yellow-400 flex items-center">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
           </svg>
           Add Vehicle
         </button>
-        <button onclick="openModal('addCategoryModal')" class="bg-primary px-4 py-2 rounded-lg hover:bg-blue-400 flex items-center">
+        <button onclick="openModal('addCategoryModal')" class="bg-primary px-4 py-2 rounded-lg hover:bg-yellow-400 flex items-center">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
           </svg>
@@ -203,6 +203,18 @@ if($_SESSION['role_id'] == 1){
             </tbody>
           </table>
         </div>
+        <div class="p-4 border-t border-gray-200">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Showing 1 to 10 of 50 entries</span>
+            <div class="flex space-x-2">
+              <button class="px-3 py-1 border rounded hover:bg-gray-50">Previous</button>
+              <button class="px-3 py-1 bg-primary rounded">1</button>
+              <button class="px-3 py-1 border rounded hover:bg-gray-50">2</button>
+              <button class="px-3 py-1 border rounded hover:bg-gray-50">3</button>
+              <button class="px-3 py-1 border rounded hover:bg-gray-50">Next</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Category Table -->
@@ -248,7 +260,7 @@ if($_SESSION['role_id'] == 1){
             <button onclick="closeModal('addVehicleModal')" class="text-gray-500 hover:text-gray-700">×</button>
           </div>
           <form class="space-y-4" method="post" enctype="multipart/form-data">
-            <div class="grid grid-cols-1 gap-4">
+            <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-medium mb-1">Vehicle modele</label>
                 <input type="text" class="w-full border rounded-lg p-2" name="modele">
@@ -271,13 +283,13 @@ if($_SESSION['role_id'] == 1){
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium  mb-1">Price per Day</label>
+                <label class="block text-sm font-medium mb-1">Price per Day</label>
                 <input type="number" class="w-full border rounded-lg p-2" name="price">
               </div>
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Vehicle Image</label>
-              <input type="test" class="w-full border rounded-lg p-2" name="Vehicle_Image">
+              <input type="file" class="w-full border rounded-lg p-2" name="Vehicle_Image">
             </div>
             <div class="flex justify-end space-x-4">
               <button type="button" onclick="closeModal('addVehicleModal')" class="px-4 py-2 border rounded-lg">Cancel</button>
@@ -325,10 +337,10 @@ if($_SESSION['role_id'] == 1){
   </html>
 <?php
 } else if ($_SESSION['role_id'] == 2) {
-  header('location:../index.php');
+  header('location: ../index.php');
   exit();
 } else {
-  header('location:../autentification/signUp.php');
+  header('location: ../autentification/signUp.php');
   exit();
 }
 ?>

@@ -1,6 +1,7 @@
 
 <?php
 session_start();
+if($_SESSION['role_id'] == 2){
 ?>
 
 <!DOCTYPE html>
@@ -95,3 +96,9 @@ session_start();
     </div>
 </body>
 </html>
+<?php 
+}else{
+  header('location: ../index.php');
+  exit();
+}
+?>

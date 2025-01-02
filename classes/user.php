@@ -11,29 +11,6 @@ class user
         $this->conn = $db->connectpdo();
     }
 
-    public function registerAdmin($nom, $prenom, $email, $password)
-    {
-        $stmt = $this->conn->prepare("SELECT * FROM user WHERE email = ?");
-        $stmt->bindParam(1, $email);
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            return false;
-        } else {
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $stmt = $this->conn->prepare("INSERT INTO user (nom, prenom, email, password, status, role_id) VALUES (?, ?, ?, ?, 1)");
-            $stmt->bindParam(1, $nom);
-            $stmt->bindParam(2, $prenom);
-            $stmt->bindParam(3, $email);
-            $stmt->bindParam(4, $hashedPassword);
-            if ($stmt->execute()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
     public function register($nom, $prenom, $email, $password) {
         $stmt = $this->conn->prepare("SELECT * FROM user WHERE email = ?");
         $stmt->bindParam(1, $email);
@@ -68,7 +45,7 @@ class user
 
                 $_SESSION["user_id"] = $user['user_id'];
                 $_SESSION["email"] = $user['email'];
-                $_SESSION["role"] = $user['role_id'];
+                $_SESSION["role_id"] = $user['role_id'];
                 $_SESSION["nom"] = $user['nom'];
                 $_SESSION["prenom"] = $user['prenom'];
 
@@ -88,7 +65,4 @@ class user
         }
     }
 
-    function userDisconnect(){
-       
-    }
 }
