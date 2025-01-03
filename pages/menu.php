@@ -89,7 +89,7 @@ if ($_SESSION['role_id'] == 2) {
                             <p class="text-gray-600">1000 CV - Hybride</p>
                             <div class="mt-4 flex justify-between items-center">
                                 <span class="text-2xl font-bold text-gray-900"><?php echo $row['prix'] . "$" ?><span class="text-sm text-gray-600">/jour</span></span>
-                                <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"><a href="../pages/reservation.php">Réserver</a></button>
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"><a href="../pages/reservation.php?vehiculeId=<?php echo $row['vehicule_id'] ?>&clientId=<?php echo $_SESSION['user_id'] ?>">Réserver</a></button>
                             </div>
                         </div>
                     </div>
