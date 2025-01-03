@@ -1,6 +1,10 @@
 <?php
 session_start();
 if ($_SESSION['role_id'] == 2) {
+    require_once('../classes/reserve.php');
+    $reservation = new reservation;
+
+
 ?>
 
     <!DOCTYPE html>
@@ -75,27 +79,72 @@ if ($_SESSION['role_id'] == 2) {
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="text-xl font-bold text-gray-800">My Reservations</h3>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <?php
-                                    // $activity->showreservationOfUser();
-                                    ?>
-                                </tbody>
-                            </table>
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Price</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <?php
+                                        $rows = $reservation->showClientReservations();
+                                        foreach ($rows as $row) {
+                                            $status_accepte = $row['status'] === 'accepte' ? 'text-green-600' : 'text-gray-500';
+                                            $status_refuse = $row['status'] === 'refuse' ? 'text-red-600' : 'text-gray-500';
+                                        ?>
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        <?php echo $row['marque'] . ' ' . $row['modele']; ?>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900">
+                                                        <?php echo date('M d, Y', strtotime($row['date_debut'])); ?>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900">
+                                                        <?php echo date('M d, Y', strtotime($row['date_fin'])); ?>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900">
+                                                        <?php echo number_format($row['prix'], 2); ?> $
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?php echo $row['status'] === 'accepte' ? $status_accepte : $status_refuse; ?>">
+                                                        <?php echo $row['status']; ?>
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <?php if ($row['status'] == 'waiting') { ?>
+                                                        <form action="../classes/user.php" method="POST">
+                                                            <input type="hidden" name="reservation_id" value="<?php echo $row['reservation_id']; ?>">
+                                                            <input type="hidden" name="action" value="cancel">
+                                                            <button type="submit" class="btn-cancel px-4 py-2 rounded-lg text-sm">
+                                                                Cancel
+                                                            </button>
+                                                        </form>
+                                                    <?php } ?>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </body>
 
     </html>

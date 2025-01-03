@@ -127,7 +127,7 @@ if ($_SESSION['role_id'] == 2) {
                 ?>
 
                 <!-- Reservation Form -->
-                <form class="space-y-4" method="post" action="../classes/client.php?vehicule_Id=<?php echo $_SESSION['vehicule_id'] ?>&clientId=<?php echo $_SESSION['user_id'] ?>">
+                <form class="space-y-4" method="post" action="../classes/user.php?vehicule_Id=<?php echo $_SESSION['vehicule_id'] ?>&clientId=<?php echo $_SESSION['user_id'] ?>">
                   <div class="grid grid-cols-2 gap-4">
                     <div>
                       <label class="block text-sm font-medium mb-1">Pick-up Date</label>

@@ -1,266 +1,378 @@
-<!DOCTYPE html>
-<html lang="fr">
+<?php
+session_start();
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drive & Loc - Réservation</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+if ($_SESSION['role_id'] == 2) {
+  require_once('../classes/reservation.php');
 
-<body class="bg-gray-100">
-  <!-- Navigation -->
-  <nav class="bg-white shadow-sm">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="flex justify-between items-center h-16">
-        <a href="#" class="text-2xl font-bold text-gray-800">D&L</a>
-        <div class="hidden md:flex space-x-8">
-          <a href="../index.php" class="text-gray-600 hover:text-gray-900">Accueil</a>
-          <a href="#" class="text-gray-600 hover:text-gray-900">Collection</a>
-          <a href="#" class="text-gray-600 hover:text-gray-900">Services</a>
-          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Réserver
-          </button>
+  $reservation = new reservation();
+?>
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reservations - Drive & Loc</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #FFD700;
+        --secondary: #FFFFFF;
+      }
+
+      .bg-primary {
+        background-color: var(--primary);
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        transition: transform 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-cancel {
+        background-color: #FF4444;
+        color: white;
+        transition: transform 0.3s ease;
+      }
+
+      .btn-cancel:hover {
+        transform: translateY(-2px);
+        background-color: #FF0000;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="bg-primary shadow-lg">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center space-x-4">
+            <a href="../index.php" class="text-2xl font-bold w-8 mr-24"><img src="../imgs/360_F_323469705_belmsoxt9kj49rxSmOBXpO0gHtfVJvjl-removebg-preview.png" alt="LOGO"></a>
+          </div>
+          <div class="hidden w-full md:block md:w-auto">
+            <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium rounded-lg md:flex-row md:space-x-8 md:mt-0">
+              <li>
+                <a href="../index.php" class="block py-2 pl-3 pr-4 text-white hover:text-black-200 md:p-0">Home</a>
+              </li>
+              <li>
+                <a href="../pages/vehicles.php" class="block py-2 pl-3 pr-4 text-white hover:text-black-200 md:p-0">Cars</a>
+              </li>
+            </ul>
+          </div>
+          <?php if (isset($_SESSION['user_id'])) { ?>
+            <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+              <button type="button" class="flex text-sm rounded-full md:me-0" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                <span class="sr-only">Open user menu</span>
+                <img width="40px" src="../imgs/profilephoto.png" alt="user photo">
+              </button>
+              <!-- Dropdown menu -->
+              <div class="z-50 hidden absolute top-10 right-40 z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
+                <div class="px-4 py-3">
+                  <span class="block text-sm text-gray-900 dark:text-white"><?php echo $_SESSION['nom'] . " " . $_SESSION['prenom'] ?></span>
+                  <span class="block text-sm  text-gray-500 truncate dark:text-gray-400"><?php echo $_SESSION['email'] ?></span>
+                </div>
+                <li>
+                  <a href="../pages/reservation_hestorie.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white ">My Reservations</a>
+                </li>
+                <li>
+                  <a href="../classes/user.php?signout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white ">Sign out</a>
+                </li>
+                </ul>
+              </div>
+              <button data-collapse-toggle="navbar-user" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-user" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+                </svg>
+              </button>
+            </div>
+          <?php } else { ?>
+            <div class="flex items-center space-x-6">
+              <a href="../autentification/login.php">Login</a>
+              <a href="../autentification/signup.php" class="bg-white px-6 py-2 rounded-lg hover:bg-gray-100">Register</a>
+            </div>
+          <?php } ?>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- Header -->
-  <header class="bg-white py-8">
-    <div class="max-w-7xl mx-auto px-4">
-      <h1 class="text-3xl font-bold text-gray-900">Réservation</h1>
-      <p class="text-gray-600 mt-2">Complétez les informations ci-dessous pour réserver votre véhicule</p>
-    </div>
-  </header>
+    <main class="py-16">
+      <div class="max-w-7xl mx-auto px-4">
+        <h1 class="text-3xl font-bold mb-8">My Reservations</h1>
 
-  <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 py-8">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Reservation Form -->
-      <div class="md:col-span-2 space-y-8">
-        <!-- Vehicle Selection -->
-        <div class="bg-white p-6 rounded shadow-sm">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Sélection du véhicule</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-gray-700 mb-2">Catégorie</label>
-              <select class="w-full p-2 border rounded">
-                <option value="">Sélectionnez une catégorie</option>
-                <option value="sports">Voitures de sport</option>
-                <option value="luxury">Berlines de luxe</option>
-                <option value="suv">SUV Premium</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-gray-700 mb-2">Véhicule</label>
-              <select class="w-full p-2 border rounded">
-                <option value="">Sélectionnez un véhicule</option>
-                <option value="ferrari">Ferrari SF90 Stradale</option>
-                <option value="porsche">Porsche 911 GT3</option>
-                <option value="tesla">Tesla Model S Plaid</option>
-              </select>
-            </div>
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Price</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <?php
+                $rows = $reservation->showClientReservations();
+                foreach ($rows as $row) {
+                  $status_accepte = $row['status'] === 'accepte' ? 'text-green-600' : 'text-gray-500';
+                  $status_refuse = $row['status'] === 'refuse' ? 'text-red-600' : 'text-gray-500';
+                ?>
+                  <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">
+                        <?php echo $row['marque'] . ' ' . $row['modele']; ?>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        <?php echo date('M d, Y', strtotime($row['date_debut'])); ?>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        <?php echo date('M d, Y', strtotime($row['date_fin'])); ?>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">
+                        <?php echo number_format($row['prix'], 2); ?> $
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <?php echo $row['status'] === 'accepte' ? $status_accepte : $status_refuse; ?>">
+                        <?php echo $row['status']; ?>
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <?php if ($row['status'] == 'waiting') { ?>
+                        <form action="../classes/client.php" method="POST">
+                          <input type="hidden" name="reservation_id" value="<?php echo $row['reservation_id']; ?>">
+                          <input type="hidden" name="action" value="cancel">
+                          <button type="submit" class="btn-cancel px-4 py-2 rounded-lg text-sm">
+                            Cancel
+                          </button>
+                        </form>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+            </table>
           </div>
         </div>
-
-        <!-- Dates -->
-        <div class="bg-white p-6 rounded shadow-sm">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Dates de location</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-gray-700 mb-2">Date de début</label>
-              <input type="date" class="w-full p-2 border rounded">
-            </div>
-            <div>
-              <label class="block text-gray-700 mb-2">Date de fin</label>
-              <input type="date" class="w-full p-2 border rounded">
-            </div>
-          </div>
-        </div>
-
-        <!-- Personal Information -->
-        <div class="bg-white p-6 rounded shadow-sm">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Informations personnelles</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-gray-700 mb-2">Nom</label>
-              <input type="text" class="w-full p-2 border rounded">
-            </div>
-            <div>
-              <label class="block text-gray-700 mb-2">Prénom</label>
-              <input type="text" class="w-full p-2 border rounded">
-            </div>
-            <div>
-              <label class="block text-gray-700 mb-2">Email</label>
-              <input type="email" class="w-full p-2 border rounded">
-            </div>
-            <div>
-              <label class="block text-gray-700 mb-2">Téléphone</label>
-              <input type="tel" class="w-full p-2 border rounded">
-            </div>
-          </div>
-        </div>
-
-        <!-- Driver's License -->
-        <div class="bg-white p-6 rounded shadow-sm">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Permis de conduire</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-gray-700 mb-2">Numéro de permis</label>
-              <input type="text" class="w-full p-2 border rounded">
-            </div>
-            <div>
-              <label class="block text-gray-700 mb-2">Date d'obtention</label>
-              <input type="date" class="w-full p-2 border rounded">
-            </div>
-          </div>
-        </div>
       </div>
+    </main>
 
-      <!-- Summary Card -->
-      <div class="md:col-span-1">
-        <div class="bg-white p-6 rounded shadow-sm sticky top-8">
-          <h2 class="text-xl font-bold text-gray-900 mb-4">Résumé de la réservation</h2>
-          <div class="space-y-4">
-            <div class="pb-4 border-b">
-              <p class="text-gray-600">Véhicule sélectionné</p>
-              <p class="text-lg font-medium text-gray-900">Ferrari SF90 Stradale</p>
-            </div>
-            <div class="pb-4 border-b">
-              <p class="text-gray-600">Durée de location</p>
-              <p class="text-lg font-medium text-gray-900">3 jours</p>
-            </div>
-            <div class="pb-4 border-b">
-              <p class="text-gray-600">Prix par jour</p>
-              <p class="text-lg font-medium text-gray-900">2500€</p>
-            </div>
-            <div class="pb-4">
-              <p class="text-gray-600">Total</p>
-              <p class="text-2xl font-bold text-gray-900">7500€</p>
-            </div>
-            <button class="w-full bg-blue-600 text-white px-6 py-3 rounded font-medium hover:bg-blue-700">
-              Confirmer la réservation
-            </button>
-            <p class="text-sm text-gray-500 text-center mt-4">
-              En confirmant, vous acceptez nos conditions générales de location
-            </p>
-          </div>
-        </div>
+    <footer class="bg-gray-800 text-white py-8 mt-80">
+      <div class="max-w-7xl mx-auto px-4 text-center">
+        <p>&copy; 2024 Drive & Loc. All rights reserved.</p>
       </div>
-    </div>
-  </main>
+    </footer>
 
-  <!-- Footer -->
-  <footer class="bg-white border-t mt-12">
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div>
-          <h3 class="text-lg font-bold text-gray-900 mb-4">D&L</h3>
-          <p class="text-gray-600">L'excellence automobile à votre service.</p>
-        </div>
-        <div>
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Contact</h3>
-          <p class="text-gray-600">+33 1 23 45 67 89</p>
-          <p class="text-gray-600">contact@drive-loc.fr</p>
-        </div>
-        <div>
-          <h3 class="text-lg font-bold text-gray-900 mb-4">Adresse</h3>
-          <p class="text-gray-600">75008 Paris, France</p>
-        </div>
-      </div>
-      <div class="mt-8 pt-8 border-t text-center text-gray-600">
-        <p>&copy; 2024 Drive & Loc. Tous droits réservés.</p>
-      </div>
-    </div>
-  </footer>
-</body>
+    <script>
+      let isModalOpen = false;
 
-</html>
+      document.getElementById('user-menu-button').addEventListener('click', function() {
+        let dropdown = document.getElementById('user-dropdown');
 
+        if (isModalOpen) {
+          dropdown.classList.add('hidden');
+          isModalOpen = false;
+        } else {
+          dropdown.classList.remove('hidden');
+          isModalOpen = true;
+        }
+      });
+    </script>
+  </body>
 
-<div class="md:w-1/2 p-6">
-  <div class="flex justify-between items-start mb-4">
-    <div>
-      <h1 class="text-3xl font-bold"><?php echo $row['marque'] ?></h1>
-      <p class="text-gray-600 text-xl mt-2"><?php echo $row['modele'] ?></p>
-    </div>
-    <span class="bg-primary px-4 py-2 rounded-full text-lg font-semibold">$<?php echo $row['prix'] ?>/day</span>
-  </div>
-
-
-  <!-- Availability Status -->
-  <div class="mb-6">
-    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800">
-      <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-      <?php echo $row['status'] ?>
-    </span>
-    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-red-100 text-red-800">
-      <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
-      <?php echo $row['nom'] ?>
-    </span>
-  </div>
-
-  <!-- Car Features -->
-  <div class="grid grid-cols-2 gap-6 mb-6">
-    <div>
-      <h3 class="font-semibold mb-2">Features:</h3>
-      <ul class="space-y-2">
-        <li>✓ 5 Seats</li>
-        <li>✓ Automatic Transmission</li>
-        <li>✓ GPS Navigation</li>
-        <li>✓ Bluetooth</li>
-      </ul>
-    </div>
-    <div>
-      <h3 class="font-semibold mb-2">Specifications:</h3>
-      <ul class="space-y-2">
-        <li>• Engine: 2.5L 4-cylinder</li>
-        <li>• Fuel: Gasoline</li>
-        <li>• Year: 2024</li>
-        <li>• Mileage: 15,000 km</li>
-      </ul>
-    </div>
-  </div>
-  <?php
-  if (isset($_SESSION['date_invalide'])) {
-    echo $_SESSION['date_invalide'];
-  }
-  ?>
-
-  <!-- Reservation Form -->
-  <form class="space-y-4" method="post" action="../classes/client.php?vehicule_Id=<?php echo $_SESSION['vehicule_id'] ?>&clientId=<?php echo $_SESSION['user_id'] ?>">
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-medium mb-1">Pick-up Date</label>
-        <input type="date" class="w-full border rounded-lg p-2" name="date_debut">
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Return Date</label>
-        <input type="date" class="w-full border rounded-lg p-2" name="date_fin">
-      </div>
-    </div>
-    <input name="reservation_submit" type="submit" class="cursor-pointer btn-primary w-full py-3 rounded-lg text-lg font-semibold mt-6" value="Reserve Now">
-  </form>
-
-
-
-  <?php
-// Define the two dates
-$date1 = new DateTime("2025-01-01");
-$date2 = new DateTime("2024-12-31");
-
-// Calculate the difference
-$diff = $date1->diff($date2);
-
-// Display the difference
-echo "Difference: " . $diff->days . " days\n";
-echo "Years: " . $diff->y . ", Months: " . $diff->m . ", Days: " . $diff->d . "\n";
-
-// Additional details
-if ($diff->invert) {
-    echo "The second date is earlier than the first date.\n";
+  </html>
+<?php
 } else {
-    echo "The first date is earlier than the second date.\n";
+  header('location: ../Drive-Loc/autentification/signup.php');
+  exit();
 }
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- !on getAllReservations() {
+        $sql = "SELECT r.*, 
+                       CONCAT(u.nom, ' ', u.prenom) as client_name,
+                       CONCAT(v.marque, ' ', v.modele) as vehicle_name
+                FROM reservation r
+                JOIN user u ON r.user_id = u.user_id
+                JOIN vehicule v ON r.vehicule_id = v.vehicule_id";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateReservationStatus($reservation_id, $status) {
+        $sql = "UPDATE reservation SET status = ? WHERE reservation_id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$status, $reservation_id]);
+    }
+
+    public function showClientReservations(){
+       $user_id = $_SESSION['user_id'];
+
+       $sql = "SELECT r.*, v.modele, v.marque, v.prix
+              FROM reservation r 
+              JOIN vehicule v ON r.vehicule_id = v.vehicule_id 
+              WHERE r.user_id = ? ";
+       $stmt = $this->pdo->prepare($sql);
+
+       $stmt->bindParam(1, $user_id);
+
+       $stmt->execute();
+
+       return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+}
+
+?>
+
+
+
+<!-- <?php
+      // session_start();
+
+      // require_once '../classes/user.php';
+      // require_once '../classes/conn.php';
+
+      // class client extends User{
+      //     private $pdo;
+
+      //     function __construct(){
+      //         $connection = new DBconnect();
+      //         $this->pdo = $connection->connectpdo();
+      //     }
+
+      //     function ReserverVehicule($date_debut, $date_fin, $client_id, $vehicule_id){
+      //         $sql = "INSERT INTO reservation (date_debut, date_fin, status, user_id, vehicule_id)
+      //                 VALUES (:date_debut, :date_fin, 'waiting', :user_id, :vehicule_id)";
+      //         $stmt = $this->pdo->prepare($sql);
+      //         $stmt->bindParam(":date_debut", $date_debut);
+      //         $stmt->bindParam(":date_fin", $date_fin);
+      //         $stmt->bindParam(":user_id", $client_id);
+      //         $stmt->bindParam(":vehicule_id", $vehicule_id);
+
+      //         if($stmt->execute()){
+      //             $_SESSION['success'] = "Reservation completed, wait for admin approval!";
+      //             header('Location: ../pages/reservation_page.php?vehiculeId=' . $vehicule_id);
+      //             exit();
+      //         }
+      //     }
+
+      //     function cancelReservation($reservation_id){
+      //         $sql = "UPDATE reservation
+      //                 SET status = 'refuse'
+      //                 WHERE reservation_id = :reservation_id";
+      //         $stmt = $this->pdo->prepare($sql);
+      //         $stmt->bindParam(':reservation_id', $reservation_id);
+      //         if($stmt->execute()){
+      //             header('Location: ../pages/reservation_hestorie.php');
+      //             exit();
+      //         }
+      //     }
+
+      //     function ShowAllClients(){
+      //         $sql = "SELECT * FROM user";
+      //         $stmt = $this->pdo->prepare($sql);
+      //         if($stmt->execute()){
+      //             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      //         }
+      //     }
+
+
+      // }
+
+      // if (isset($_POST['reservation_submit']) && isset($_GET['vehicule_Id']) && isset($_GET['clientId'])) {
+
+      //     $date_debut = $_POST['date_debut'];
+      //     $date_fin = $_POST['date_fin'];
+      //     $vehiculeId = $_GET['vehicule_Id'];
+      //     $clientId = $_GET['clientId'];
+
+      //     $client = new client();
+
+      //     if ($date_debut >= date("Y-m-d") && $date_fin > $date_debut) {
+      //         $client->ReserverVehicule($date_debut, $date_fin, $clientId, $vehiculeId);
+      //     } else {
+      //         $_SESSION['date_invalide'] = "Please enter a valid date!";
+      //         header('Location: ../pages/reservation_page.php?vehiculeId=' . $vehiculeId);
+      //         exit();
+      //     }
+      // }
+
+      // if(isset($_POST['action']) && isset($_POST['reservation_id'])){
+      //     $reservation_id = $_POST['reservation_id'];
+
+      //     $client = new client();
+
+      //     $client->cancelReservation($reservation_id);
+      // }
+
+      ?> --> -->

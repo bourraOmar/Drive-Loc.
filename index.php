@@ -1,6 +1,5 @@
-<?php
-require_once '../Drive-Loc/connection/connect.php';
-session_start();
+<?php 
+    session_start();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -25,7 +24,7 @@ session_start();
                     <a href="#" class="text-gray-600 hover:text-gray-900">Collection</a>
                     <a href="#" class="text-gray-600 hover:text-gray-900">Services</a>
                     <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                        <a href="../Drive-Loc/pages/menu.php">Réserver maintenant</a>
+                        Réserver maintenant
                     </button>
                     <?php if (isset($_SESSION["role_id"])) { ?>
                         <div>
@@ -140,7 +139,7 @@ session_start();
 
                 <!-- Vehicle Card 3 -->
                 <div class="bg-white rounded-lg shadow overflow-hidden">
-                    <img src="img/car7.jpg"
+                    <img src="img/car1.jpg"
                         alt="Tesla Model S Plaid"
                         class="w-full h-48 object-cover">
                     <div class="p-4">

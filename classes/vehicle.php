@@ -1,7 +1,7 @@
+
 <?php
 
 require_once '../connection/connect.php';
-
 
 class Vehicule
 {
@@ -53,21 +53,32 @@ class Vehicule
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
   }
-  
-  
-  function showSpiceficAllVehicule($selectedvehiculeID){
-  $sql = "SELECT v.*, c.nom
+
+
+  function showSpiceficAllVehicule($selectedvehiculeID)
+  {
+    $sql = "SELECT v.*, c.nom
           FROM vehicule v
           LEFT JOIN Categorie c
           ON v.Categorie_id = c.Categorie_id
           WHERE vehicule_id = $selectedvehiculeID";
-  $stmt = $this->pdo->prepare($sql);
-  if($stmt->execute()){
+    $stmt = $this->pdo->prepare($sql);
+    if ($stmt->execute()) {
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+  }
+
+
+  function showTop3Vehicule()
+  {
+    $sql = "SELECT v.*, c.nom
+          FROM vehicule v
+          LEFT JOIN Categorie c
+          ON v.Categorie_id = c.Categorie_id
+          LIMIT 3";
+    $stmt = $this->pdo->prepare($sql);
+    if ($stmt->execute()) {
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
   }
 }
-}
-
-
-
-

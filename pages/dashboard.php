@@ -163,10 +163,8 @@ if ($_SESSION['role_id'] == 1) {
             </div>
 
             <!-- Vehicles Table -->
-            <!-- <div class="p-6 border-b border-gray-200 flex justify-between items-center"> -->
                 <h2 class="text-xl font-bold">Vehicles Management</h2>
                 <div class="bg-white rounded-lg shadow-md mb-6 mt-6">
-                <!-- </div> -->
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead class="bg-blue-500">
@@ -206,10 +204,8 @@ if ($_SESSION['role_id'] == 1) {
             </div>
 
             <!-- Category Table -->
-            <!-- <div class="p-6 border-b border-gray-200 flex justify-between items-center"> -->
                 <h2 class="text-xl font-bold">Categories Management</h2>
                 <div class="bg-white rounded-lg shadow-md mt-6">
-                <!-- </div> -->
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead class="bg-blue-500">

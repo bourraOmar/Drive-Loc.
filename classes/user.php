@@ -1,5 +1,5 @@
 <?php
-require_once '../connection/connect.php';
+require_once('../connection/connect.php');
 
 class user
 {
@@ -65,4 +65,38 @@ class user
         }
     }
 
+    function ReserverVehicule($date_debut, $date_fin, $client_id, $vehicule_id){
+        $sql = "INSERT INTO reservation (date_debut, date_fin, status, user_id, vehicule_id)
+                VALUES (:date_debut, :date_fin, 'waiting', :user_id, :vehicule_id)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":date_debut", $date_debut);
+        $stmt->bindParam(":date_fin", $date_fin);
+        $stmt->bindParam(":user_id", $client_id);
+        $stmt->bindParam(":vehicule_id", $vehicule_id);
+
+        if($stmt->execute()){
+            $_SESSION['success'] = "Reservation completed, wait for admin approval!";
+            header('Location: ../pages/reservation.php?vehiculeId=' . $vehicule_id);
+            exit();
+        }
+    }
+}
+
+
+if (isset($_POST['reservation_submit']) && isset($_GET['vehicule_Id']) && isset($_GET['clientId'])) {
+    
+    $date_debut = $_POST['date_debut'];
+    $date_fin = $_POST['date_fin'];
+    $vehiculeId = $_GET['vehicule_Id'];
+    $clientId = $_GET['clientId'];
+
+    $user = new user();
+
+    if ($date_debut >= date("Y-m-d") && $date_fin > $date_debut) {
+        $user->ReserverVehicule($date_debut, $date_fin, $clientId, $vehiculeId);
+    } else {
+        $_SESSION['date_invalide'] = "Please enter a valid date!";
+        header('Location: ../pages/reservation.php?vehiculeId=' . $vehiculeId);
+        exit();
+    }
 }
