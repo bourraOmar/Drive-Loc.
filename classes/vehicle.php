@@ -1,7 +1,6 @@
-
 <?php
 
-require_once '../connection/connect.php';
+require_once __DIR__ . '/../connection/connect.php';
 
 class Vehicule
 {
@@ -81,4 +80,13 @@ class Vehicule
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
   }
+
+
+  public function removeVehicule($Vehicule_id){
+    $sql = "DELETE FROM vehicule 
+            WHERE vehicule_id = :vehicule_id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindParam(':vehicule_id', $Vehicule_id);
+    $stmt->execute();
+}
 }

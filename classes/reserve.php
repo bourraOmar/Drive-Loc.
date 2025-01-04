@@ -43,6 +43,13 @@ class reservation {
        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function updateReservationStatus($reservation_id, $status) {
+        $sql = "UPDATE reservation SET status = ? WHERE reservation_id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$status, $reservation_id]);
+    }
+
+    
 }
 
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 require_once '../classes/categorie.php';
 require_once '../classes/vehicle.php';
 
@@ -17,22 +16,40 @@ if ($_SESSION['role_id'] == 2) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Drive & Loc - Notre Collection</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <style>
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, rgb(37, 99, 235), rgb(37, 143, 235));
+            }
+
+            .hover\:bg-gradient-primary:hover {
+                background: linear-gradient(135deg, rgb(37, 143, 235), rgb(37, 99, 235));
+            }
+
+            .shadow-soft {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .transition-all {
+                transition: all 0.3s ease;
+            }
+        </style>
     </head>
 
     <body class="bg-gray-100">
         <!-- Navigation -->
-        <nav class="bg-white shadow">
+        <nav class="bg-gradient-primary shadow-lg">
             <div class="max-w-7xl mx-auto px-4">
-                <div class="flex justify-between h-16">
+                <div class="flex justify-between h-16 items-center">
                     <div class="flex items-center">
-                        <span class="text-2xl font-bold text-blue-600">D&L</span>
+                        <span class="text-2xl font-bold text-white">D&L</span>
                     </div>
                     <div class="hidden md:flex items-center space-x-8">
-                        <a href="../index.php" class="text-gray-600 hover:text-gray-900">Accueil</a>
-                        <a href="#" class="text-gray-600 hover:text-gray-900">Collection</a>
-                        <a href="#" class="text-gray-600 hover:text-gray-900">Services</a>
+                        <a href="../index.php" class="text-white hover:text-gray-200 transition-all">Accueil</a>
+                        <a href="#" class="text-white hover:text-gray-200 transition-all">Collection</a>
+                        <a href="#" class="text-white hover:text-gray-200 transition-all">Services</a>
                         <div>
-                            <a href="../profils/client.php"><img width="25px" class="bg-white rounded-full" src="../img/profile-major.svg" alt=""></a>
+                            <a href="../profils/client.php"><img width="25px" class="bg-white rounded-full shadow-soft" src="../img/profile-major.svg" alt="Profile"></a>
                         </div>
                     </div>
                 </div>
@@ -48,10 +65,10 @@ if ($_SESSION['role_id'] == 2) {
         </header>
 
         <!-- Filters -->
-        <div class="bg-white py-4 mb-8 shadow-sm">
+        <div class="bg-white py-6 mb-8 shadow-sm">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <select class="w-full p-2 border rounded">
+                    <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">Toutes les catégories</option>
                         <?php
                         $arr = $categorie->showCategorie();
@@ -60,7 +77,7 @@ if ($_SESSION['role_id'] == 2) {
                         }
                         ?>
                     </select>
-                    <select class="w-full p-2 border rounded">
+                    <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">Toutes les marques</option>
                         <?php
                         $arr = $vehicule->showAllVehicule();
@@ -81,7 +98,7 @@ if ($_SESSION['role_id'] == 2) {
                 $rows = $vehicule->showAllVehicule();
                 foreach ($rows as $row) {
                 ?>
-                    <div class="bg-white rounded shadow-sm overflow-hidden">
+                    <div class="bg-white rounded-lg shadow-soft overflow-hidden transition-all hover:shadow-lg">
                         <img src="<?php echo $row['vehicule_image'] ?>" alt="Ferrari SF90" class="w-full h-48 object-cover">
                         <div class="p-4">
                             <span class="text-sm text-blue-600 font-medium"><?php echo $row['nom'] ?></span>
@@ -89,7 +106,7 @@ if ($_SESSION['role_id'] == 2) {
                             <p class="text-gray-600">1000 CV - Hybride</p>
                             <div class="mt-4 flex justify-between items-center">
                                 <span class="text-2xl font-bold text-gray-900"><?php echo $row['prix'] . "$" ?><span class="text-sm text-gray-600">/jour</span></span>
-                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"><a href="../pages/reservation.php?vehiculeId=<?php echo $row['vehicule_id'] ?>&clientId=<?php echo $_SESSION['user_id'] ?>">Réserver</a></button>
+                                <a href="../pages/reservation.php?vehiculeId=<?php echo $row['vehicule_id'] ?>&clientId=<?php echo $_SESSION['user_id'] ?>" class="bg-gradient-primary text-white px-4 py-2 rounded-lg hover:bg-gradient-primary transition-all">Réserver</a>
                             </div>
                         </div>
                     </div>

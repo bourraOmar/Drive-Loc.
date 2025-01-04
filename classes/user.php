@@ -80,6 +80,18 @@ class user
             exit();
         }
     }
+
+    function cancelReservation($reservation_id){
+        $sql = "UPDATE reservation
+                SET status = 'refuse'
+                WHERE reservation_id = :reservation_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':reservation_id', $reservation_id);
+        if($stmt->execute()){
+            header('Location: ../profils/client.php');
+            exit();
+        }
+    }
 }
 
 
@@ -99,4 +111,12 @@ if (isset($_POST['reservation_submit']) && isset($_GET['vehicule_Id']) && isset(
         header('Location: ../pages/reservation.php?vehiculeId=' . $vehiculeId);
         exit();
     }
+}
+
+if(isset($_POST['action']) && isset($_POST['reservation_id'])){
+    $reservation_id = $_POST['reservation_id'];
+
+    $client = new user();
+
+    $client->cancelReservation($reservation_id);
 }
