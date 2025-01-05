@@ -67,7 +67,7 @@ if ($_SESSION['role_id'] == 2) {
         <!-- Filters -->
         <div class="bg-white py-6 mb-8 shadow-sm">
             <div class="max-w-7xl mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">Toutes les catégories</option>
                         <?php
@@ -86,13 +86,14 @@ if ($_SESSION['role_id'] == 2) {
                         }
                         ?>
                     </select>
+                    <input type="search" name="searchByName" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" id="searchByName">
                 </div>
             </div>
         </div>
 
         <!-- Vehicle Grid -->
         <div class="max-w-7xl mx-auto px-4 mb-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Vehicle Card 1 -->
                 <?php
                 $rows = $vehicule->showAllVehicule();
@@ -138,6 +139,7 @@ if ($_SESSION['role_id'] == 2) {
             </div>
         </footer>
     </body>
+    <script src="../scripte/scripte.js"></script>
 
     </html>
 <?php

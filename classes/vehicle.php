@@ -89,4 +89,12 @@ class Vehicule
     $stmt->bindParam(':vehicule_id', $Vehicule_id);
     $stmt->execute();
 }
+
+public function searchByName($recherch){
+$stmt = $this->pdo->prepare("SELECT * FROM vehicule WHERE modele LIKE :shearch");
+$stmt->bindParam(':shearch', $searchB);
+$searchB = "%" . $recherch . "%";
+$stmt->execute();
+return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
