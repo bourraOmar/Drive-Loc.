@@ -68,21 +68,12 @@ if ($_SESSION['role_id'] == 2) {
         <div class="bg-white py-6 mb-8 shadow-sm">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">Toutes les catégories</option>
+                    <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" id="categoryFilter">
+                        <option value="all">Toutes les catégories</option>
                         <?php
                         $arr = $categorie->showCategorie();
                         foreach ($arr as $row) {
                             echo "<option value='" . $row['Categorie_id'] . "'>" . $row['nom'] . "</option>";
-                        }
-                        ?>
-                    </select>
-                    <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">Toutes les marques</option>
-                        <?php
-                        $arr = $vehicule->showAllVehicule();
-                        foreach ($arr as $row) {
-                            echo "<option value='" . $row['vehicule_id'] . "'>" . $row['modele'] . "</option>";
                         }
                         ?>
                     </select>
@@ -94,7 +85,7 @@ if ($_SESSION['role_id'] == 2) {
         <!-- Vehicle Grid -->
         <div class="max-w-7xl mx-auto px-4 mb-12">
             <div id="container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Vehicle Card 1 -->
+                <!-- Vehicles Card  -->
                 <?php
                 $rows = $vehicule->showAllVehicule();
                 foreach ($rows as $row) {

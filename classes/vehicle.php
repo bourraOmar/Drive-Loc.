@@ -40,7 +40,6 @@ class Vehicule
     }
   }
 
-
   function showAllVehicule()
   {
     $sql = "SELECT v.*, c.nom
@@ -52,7 +51,6 @@ class Vehicule
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
   }
-
 
   function showSpiceficAllVehicule($selectedvehiculeID)
   {
@@ -67,7 +65,6 @@ class Vehicule
     }
   }
 
-
   function showTop3Vehicule()
   {
     $sql = "SELECT v.*, c.nom
@@ -81,20 +78,33 @@ class Vehicule
     }
   }
 
-
-  public function removeVehicule($Vehicule_id){
+  public function removeVehicule($Vehicule_id)
+  {
     $sql = "DELETE FROM vehicule 
             WHERE vehicule_id = :vehicule_id";
     $stmt = $this->pdo->prepare($sql);
     $stmt->bindParam(':vehicule_id', $Vehicule_id);
     $stmt->execute();
-}
+  }
 
-public function searchByName($recherch){
-$stmt = $this->pdo->prepare("SELECT * FROM vehicule WHERE modele LIKE :shearch");
-$stmt->bindParam(':shearch', $searchB);
-$searchB = "%" . $recherch . "%";
-$stmt->execute();
-return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+  public function searchByName($recherch)
+  {
+    $stmt = $this->pdo->prepare("SELECT * FROM vehicule WHERE modele LIKE :shearch");
+    $stmt->bindParam(':shearch', $searchB);
+    $searchB = "%" . $recherch . "%";
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function getVehiculesByCategorie($Categorie_id)
+  {
+    $sql = "SELECT v.*, c.nom
+      FROM vehicule v
+      LEFT JOIN Categorie c ON v.Categorie_id = c.Categorie_id
+      WHERE v.Categorie_id = :category_id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindParam(':category_id', $Categorie_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
 }

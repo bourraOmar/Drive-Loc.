@@ -80,7 +80,7 @@ session_start();
                     </p>
                     <div class="flex gap-4">
                         <button class="bg-gradient-primary text-white px-8 py-3 rounded-lg hover:bg-gradient-primary transition-all text-lg">
-                             <a href="../Drive-Loc/pages/menu.php">Voir la collection</a>
+                            <a href="../Drive-Loc/pages/menu.php">Voir la collection</a>
                         </button>
                         <button class="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg hover:bg-gray-50 transition-all text-lg">
                             En savoir plus
@@ -129,7 +129,11 @@ session_start();
                             <div class="mt-4 flex justify-between items-center">
                                 <span class="text-2xl font-bold text-gray-900"><?php echo $row['prix'] . "$" ?><span class="text-sm text-gray-600">/jour</span></span>
                                 <button type="submit" class="bg-gradient-primary text-white px-4 py-2 rounded hover:bg-gradient-primary transition-all">
-                                    <a href="../pages/reservation.php?vehiculeId=<?php echo $row['vehicule_id'] ?>&clientId=<?php echo $_SESSION['user_id'] ?>">Réserver</a>
+                                    <?php if (isset($_SESSION['role_id'])) { ?>
+                                        <a href="../pages/reservation.php?vehiculeId=<?php echo $row['vehicule_id'] ?>&clientId=<?php echo $_SESSION['user_id'] ?>">Réserver</a>
+                                    <?php } else { ?>
+                                        <a href="../Drive-Loc/authentification/login.php">Voir plus</a>
+                                    <?php } ?>
                                 </button>
                             </div>
                         </div>

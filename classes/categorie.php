@@ -40,4 +40,5 @@ class Categorie
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
   }
+
 }
